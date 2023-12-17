@@ -28,6 +28,7 @@ let gameStarted = false;  // Flag to track if the game has started
 
 function preload() {
   titleScreen = loadImage('angry_pumpkins.jpg');
+  backgroundImage = loadImage('background.png');
   imgSkull = loadImage('skull.png');
   pumpkinImg = loadImage('angry2.png');
   imgBoxSkull = loadImage('box2.png');
@@ -301,7 +302,7 @@ function draw() {
     image(titleScreen, 0, 0, width, height);
 
   } else {
-    clear();
+    image(backgroundImage, 0, 0, width, height);
 
     Engine.update(engine);
 
