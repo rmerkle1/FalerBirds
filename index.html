@@ -50,7 +50,8 @@ function setup() {
   World.add(engine.world, ground);
 
   pumpkin = Bodies.circle(150, height - 200, 20, {
-    isStatic: true
+    isStatic: true,
+    density: 0.01
   });
   World.add(engine.world, pumpkin);
 
