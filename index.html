@@ -105,6 +105,33 @@ function setup() {
   boxes.push(new GameObject(850, 120, 50, 50, monsterImg, 1.1, true, true));
 }
 
+// Add a variable to store the current object to be shot
+let currentObject = 'angry2.png'; // Default object
+
+// Add variables to store the images for each object
+let objects = {
+  'angry2.png': pumpkinImg,
+  'nathan.png': nathanImg,
+  'erica.png': ericaImg,
+  'ella.png': ellaImg,
+  'von.png': vonImg,
+  'lanelle.png': lanelleImg,
+  'vance.png': vanceImg
+};
+
+// Function to detect clicks on menu items
+function mouseClicked() {
+  if (mouseX < 50 && mouseY < 50) {
+    // Detect click within a region (adjust this according to your UI)
+    if (mouseX > 10 && mouseY > 10) {
+      currentObject = 'nathan.png'; // Change to the selected object
+    } else if (mouseX > 60 && mouseY > 10) {
+      currentObject = 'erica.png'; // Change to the selected object
+    }
+    // Add other conditions for the rest of the objects
+  }
+}
+    
 class ExplosionManager {
   constructor() {
     this.explosions = [];
@@ -301,15 +328,12 @@ function mouseReleased() {
 function draw() {
   if (!gameStarted) {
     image(titleScreen, 0, 0, width, height);
-
   } else {
-    image(backgroundImage, 0, 0, width, height);
-
+    clear();
     Engine.update(engine);
-
     explosionManager.updateAndDisplay();
 
-    // Check if the bird has stopped after being launched
+    // Check if the pumpkin has stopped after being launched
     if (pumpkinReleased && Math.abs(pumpkin.velocity.x) < 0.01 && Math.abs(pumpkin.velocity.y) < 0.01) {
       resetpumpkin();
     }
@@ -317,7 +341,7 @@ function draw() {
     // Set the blending mode to ADD for a mix effect
     blendMode(ADD);
 
-    // Beautiful torces with particle effects :)
+    // Beautiful torches with particle effects :)
     torch1.display(); 
     torch2.display();
 
@@ -335,7 +359,7 @@ function draw() {
         angle = atan2(velocity.y, velocity.x);
       }
     } else {
-      angle = pumpkin.angle; // Use pumpkin.angle after collision
+      angle = pumpkin.angle;
     }
 
     push();
@@ -348,8 +372,29 @@ function draw() {
     for (let box of boxes) {
       box.display();
     }
+
+    // Display the selection menu (adjust positions accordingly)
+    fill(255);
+    rect(10, 10, 40, 40);
+    image(nathanImg, 15, 15, 30, 30);
+    rect(60, 10, 40, 40);
+    image(ericaImg, 65, 15, 30, 30);
+    // Add other objects to the menu
+
+    // Detect clicks on menu items
+    if (mouseIsPressed) {
+      if (mouseX < 50 && mouseY < 50) {
+        if (mouseX > 10 && mouseY > 10) {
+          pumpkinImg = nathanImg; // Change to the selected object
+        } else if (mouseX > 60 && mouseY > 10) {
+          pumpkinImg = ericaImg; // Change to the selected object
+        }
+        // Add other conditions for the rest of the objects
+      }
+    }
   }
 }
+
 
 class GameObject {
   constructor(x, y, w, h, img, scale, isMonster = false, isCircular = false) {
