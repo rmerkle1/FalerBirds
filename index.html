@@ -8,6 +8,9 @@
 </head>
 <body>
   <script>
+
+    let pumpkinImg;
+    
     // Paste your p5.js code here
     let Engine = Matter.Engine,
   World = Matter.World,
@@ -30,7 +33,6 @@ function preload() {
   titleScreen = loadImage('angry_pumpkins.jpg');
   backgroundImage = loadImage('background.png');
   imgSkull = loadImage('skull.png');
-  pumpkinImg = loadImage('angry2.png');
   imgBoxSkull = loadImage('box2.png');
   imgStone1 = loadImage('stone2.png');
   imgBone1 = loadImage('bone1.png');
@@ -38,6 +40,8 @@ function preload() {
   monsterImg = loadImage('monster.png');
   nathanImg = loadImage('nathan.png');
   ericaImg = loadImage('erica.png');
+  pumpkinImg = loadImage('angry2.png', () => {
+        console.log('Image loaded: pumpkinImg');
 }
 
 
