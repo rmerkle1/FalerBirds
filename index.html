@@ -30,14 +30,33 @@ function preload() {
   titleScreen = loadImage('angry_pumpkins.jpg');
   backgroundImage = loadImage('background.png');
   imgSkull = loadImage('skull.png');
-  pumpkinImg = loadImage('nathan.png');
+  pumpkinImg = loadImage('angry2.png');
   imgBoxSkull = loadImage('box2.png');
   imgStone1 = loadImage('stone2.png');
   imgBone1 = loadImage('bone1.png');
   imgPlank1 = loadImage('plank1.png');
   monsterImg = loadImage('monster.png');
+  nathanImg = loadImage('nathan.png');
+  ericaImg = loadImage('erica.png');
 }
 
+
+class SlingShot {
+  constructor(x, y, body) {
+    this.origin = createVector(x, y);
+    this.body = body;
+  }
+
+  display() {
+    if (!pumpkinReleased) {
+      stroke(255);
+      strokeWeight(4);
+      line(this.origin.x, this.origin.y, pumpkin.position.x, pumpkin.position.y);
+    }
+  }
+}
+
+    
 function setup() {
   let canvas = createCanvas(1500, 800);
 
@@ -113,10 +132,10 @@ let objects = {
   'angry2.png': pumpkinImg,
   'nathan.png': nathanImg,
   'erica.png': ericaImg,
-  'ella.png': ellaImg,
-  'von.png': vonImg,
-  'lanelle.png': lanelleImg,
-  'vance.png': vanceImg
+  //'ella.png': ellaImg,
+  //'von.png': vonImg,
+  //'lanelle.png': lanelleImg,
+  //'vance.png': vanceImg
 };
 
 // Function to detect clicks on menu items
@@ -629,20 +648,6 @@ function handleExplosion(monsterBody) {
   }
 }
 
-class SlingShot {
-  constructor(x, y, body) {
-    this.origin = createVector(x, y);
-    this.body = body;
-  }
-
-  display() {
-    if (!pumpkinReleased) {
-      stroke(255);
-      strokeWeight(4);
-      line(this.origin.x, this.origin.y, pumpkin.position.x, pumpkin.position.y);
-    }
-  }
-}
 
 
     // It should be placed between <script> tags within the body or head section
