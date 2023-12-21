@@ -287,20 +287,21 @@ function mousePressed() {
 }
 
 function keyPressed() {
-  //reset pumpkin position
+  // Reset pumpkin position
   if (key === ' ') {
     resetpumpkin();
   }
-  
-// Change the selected object based on key presses
-      if (keyCode === RIGHT_ARROW) {
-        objectIndex = (objectIndex + 1) % objectImages.length;
-      } else if (keyCode === LEFT_ARROW) {
-        objectIndex = (objectIndex - 1 + objectImages.length) % objectImages.length;
-      }
-      
-      selectedObject = objectImages[objectIndex];
-  
+
+  // Change the selected object based on key presses
+  if (keyCode === RIGHT_ARROW) {
+    objectIndex = (objectIndex + 1) % objectImages.length;
+  } else if (keyCode === LEFT_ARROW) {
+    objectIndex = (objectIndex - 1 + objectImages.length) % objectImages.length;
+  }
+
+  // Update the selected object image based on the new objectIndex
+  selectedObject = objectImages[objectIndex];
+
   // Clean all objects
   if (key === 'Enter') {
     for (let i = 0; i < boxes.length; i++) {
