@@ -37,6 +37,8 @@ let objectIndex = 0;
       //'vance.png'
     ];
 
+let pumpkinImg;
+
 let selectedObject = objectImages[objectIndex]; // Initial object
     
 function preload() {
@@ -68,7 +70,7 @@ function setup() {
 
   pumpkin = Bodies.circle(150, height - 200, 20, {
     isStatic: true,
-    density: 0.01
+    density: 0.001
   });
   World.add(engine.world, pumpkin);
 
@@ -351,6 +353,8 @@ function draw() {
     // Reset the blending mode to BLEND to draw the rest of the objects
     blendMode(BLEND);
 
+    pumpkinImg = loadImage(objectImages[objectIndex]);
+    
     slingshot.display();
 
     
