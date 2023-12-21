@@ -26,16 +26,31 @@ let pumpkinHasCollided = false;  // Flag to track if the pumpkin has collided wi
 let pumpkinBeingDragged = false;  // Flag to track if the pumpkin is being dragged
 let gameStarted = false;  // Flag to track if the game has started
 
+
+let objectIndex = 0;
+let objectImages = [
+    'nathan.png',
+    'erica.png',
+    //'ella.png',
+    //'von.png',
+    //'lanelle.png',
+    //'vance.png'
+  ];
+let pumpkinImg = objectImages[objectIndex];
+    
+
 function preload() {
   titleScreen = loadImage('angry_pumpkins.jpg');
   backgroundImage = loadImage('background.png');
   imgSkull = loadImage('skull.png');
-  pumpkinImg = loadImage('erica.png');
+  nathanImg = loadImage('nathan.png');
+  ericaImg = loadImage('erica.png');
   imgBoxSkull = loadImage('box2.png');
   imgStone1 = loadImage('stone2.png');
   imgBone1 = loadImage('bone1.png');
   imgPlank1 = loadImage('plank1.png');
   monsterImg = loadImage('monster.png');
+
 }
 
 function setup() {
@@ -186,6 +201,8 @@ function resetpumpkin() {
   // Delete pumpkin
   World.remove(engine.world, pumpkin);
 
+  objectIndex++;
+
   // Create new pumpkin
   pumpkin = Bodies.circle(150, height - 200, 20, {
     isStatic: true
@@ -307,6 +324,8 @@ function draw() {
     Engine.update(engine);
 
     explosionManager.updateAndDisplay();
+
+    pumpkinImg = loadImage(objectImages[objectIndex]);
 
     // Check if the bird has stopped after being launched
     if (pumpkinReleased && Math.abs(pumpkin.velocity.x) < 0.01 && Math.abs(pumpkin.velocity.y) < 0.01) {
