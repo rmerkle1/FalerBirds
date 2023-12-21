@@ -26,31 +26,21 @@ let pumpkinHasCollided = false;  // Flag to track if the pumpkin has collided wi
 let pumpkinBeingDragged = false;  // Flag to track if the pumpkin is being dragged
 let gameStarted = false;  // Flag to track if the game has started
 
-
-let objectIndex = 0;
-let objectImages = [
-    'nathan.png',
-    'erica.png',
-    //'ella.png',
-    //'von.png',
-    //'lanelle.png',
-    //'vance.png'
-  ];
-let pumpkinImg = objectImages[objectIndex];
+let isAlternate = false; // Boolean to track the current image
+let resetCount = 0; // Variable to track the count
     
 
 function preload() {
   titleScreen = loadImage('angry_pumpkins.jpg');
   backgroundImage = loadImage('background.png');
   imgSkull = loadImage('skull.png');
-  nathanImg = loadImage('nathan.png');
+  pumpkinImg = loadImage('nathan.png');
   ericaImg = loadImage('erica.png');
   imgBoxSkull = loadImage('box2.png');
   imgStone1 = loadImage('stone2.png');
   imgBone1 = loadImage('bone1.png');
   imgPlank1 = loadImage('plank1.png');
   monsterImg = loadImage('monster.png');
-
 }
 
 function setup() {
@@ -65,7 +55,8 @@ function setup() {
   World.add(engine.world, ground);
 
   pumpkin = Bodies.circle(150, height - 200, 20, {
-    isStatic: true
+    isStatic: true,
+    density: 0.01
   });
   World.add(engine.world, pumpkin);
 
@@ -193,15 +184,25 @@ class ExplosionParticle {
 }
 
 function resetpumpkin() {
-
+// Increment the counter
+  resetCount++;
+  
   // Portal effect
   let disappearPortal = new PortalEffect(pumpkin.position.x, pumpkin.position.y);
   explosionManager.explosions.push(disappearPortal);
 
+  // Alternate between images
+  isAlternate = !isAlternate;
+  
+  // Load images based on the boolean state
+  if (isAlternate) {
+    pumpkinImg = loadImage('erica.png');
+  } else {
+    pumpkinImg = loadImage('nathan.png');
+  }
+  
   // Delete pumpkin
   World.remove(engine.world, pumpkin);
-
-  objectIndex++;
 
   // Create new pumpkin
   pumpkin = Bodies.circle(150, height - 200, 20, {
@@ -325,8 +326,6 @@ function draw() {
 
     explosionManager.updateAndDisplay();
 
-    pumpkinImg = loadImage(objectImages[objectIndex]);
-
     // Check if the bird has stopped after being launched
     if (pumpkinReleased && Math.abs(pumpkin.velocity.x) < 0.01 && Math.abs(pumpkin.velocity.y) < 0.01) {
       resetpumpkin();
@@ -338,6 +337,11 @@ function draw() {
     // Beautiful torces with particle effects :)
     torch1.display(); 
     torch2.display();
+
+    // Display the counter on the canvas
+    fill(255);
+    textSize(24);
+    text(`Reset Count: ${resetCount}`, 20, 30);
 
     // Reset the blending mode to BLEND to draw the rest of the objects
     blendMode(BLEND);
