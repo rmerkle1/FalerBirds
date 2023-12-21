@@ -336,7 +336,23 @@ function draw() {
     clear();
     Engine.update(engine);
     explosionManager.updateAndDisplay();
-
+      if (nathanImgLoaded && pumpkinImgLoaded) {
+        if (currentObject === 'nathan.png') {
+          image(nathanImg, 0, 0, 40, 40);
+        } else if (currentObject === 'erica.png') {
+          image(ericaImg, 0, 0, 40, 40);
+          } //else if (currentObject === 'ella.png') {
+          //image(ellaImg, 0, 0, 40, 40);
+          //} else if (currentObject === 'von.png') {
+          //image(vonImg, 0, 0, 40, 40);
+          //} else if (currentObject === 'lanelle.png') {
+          //image(lanelleImg, 0, 0, 40, 40);
+          //} else if (currentObject === 'vance.png') {
+          //image(vanceImg, 0, 0, 40, 40);
+        
+          // Handle other selected objects similarly
+        //}
+    }
     // Check if the pumpkin has stopped after being launched
     if (pumpkinReleased && Math.abs(pumpkin.velocity.x) < 0.01 && Math.abs(pumpkin.velocity.y) < 0.01) {
       resetpumpkin();
@@ -387,23 +403,7 @@ function draw() {
 
     // Detect clicks on menu items
       // Modify the condition to change the displayed image based on the selected object
-      if (nathanImgLoaded && pumpkinImgLoaded) {
-        if (currentObject === 'nathan.png') {
-          image(nathanImg, 0, 0, 40, 40);
-        } else if (currentObject === 'erica.png') {
-          image(ericaImg, 0, 0, 40, 40);
-          } //else if (currentObject === 'ella.png') {
-          //image(ellaImg, 0, 0, 40, 40);
-          //} else if (currentObject === 'von.png') {
-          //image(vonImg, 0, 0, 40, 40);
-          //} else if (currentObject === 'lanelle.png') {
-          //image(lanelleImg, 0, 0, 40, 40);
-          //} else if (currentObject === 'vance.png') {
-          //image(vanceImg, 0, 0, 40, 40);
-        
-          // Handle other selected objects similarly
-        //}
-    }
+
   }
 }
 
