@@ -8,11 +8,6 @@
 </head>
 <body>
   <script>
-
-    let pumpkinImg;
-    let nathanImgLoaded = false;
-    let pumpkinImgLoaded = false;
-    
     // Paste your p5.js code here
     let Engine = Matter.Engine,
   World = Matter.World,
@@ -35,41 +30,14 @@ function preload() {
   titleScreen = loadImage('angry_pumpkins.jpg');
   backgroundImage = loadImage('background.png');
   imgSkull = loadImage('skull.png');
+  pumpkinImg = loadImage('nathan.png');
   imgBoxSkull = loadImage('box2.png');
   imgStone1 = loadImage('stone2.png');
   imgBone1 = loadImage('bone1.png');
   imgPlank1 = loadImage('plank1.png');
   monsterImg = loadImage('monster.png');
-  ericaImg = loadImage('erica.png');
-  nathanImg = loadImage('nathan.png', () => {
-        console.log('Image loaded: nathanImg');
-        nathanImgLoaded = true;
-      });
-
-  pumpkinImg = loadImage('angry2.png', () => {
-        console.log('Image loaded: pumpkinImg');
-        pumpkinImgLoaded = true; // Set pumpkinImgLoaded to true when pumpkinImg is loaded
-      });
-
 }
 
-
-class SlingShot {
-  constructor(x, y, body) {
-    this.origin = createVector(x, y);
-    this.body = body;
-  }
-
-  display() {
-    if (!pumpkinReleased) {
-      stroke(255);
-      strokeWeight(4);
-      line(this.origin.x, this.origin.y, pumpkin.position.x, pumpkin.position.y);
-    }
-  }
-}
-
-    
 function setup() {
   let canvas = createCanvas(1500, 800);
 
@@ -137,33 +105,6 @@ function setup() {
   boxes.push(new GameObject(850, 120, 50, 50, monsterImg, 1.1, true, true));
 }
 
-// Add a variable to store the current object to be shot
-let currentObject = 'angry2.png'; // Default object
-
-// Add variables to store the images for each object
-let objects = {
-  'angry2.png': pumpkinImg,
-  'nathan.png': nathanImg,
-  'erica.png': ericaImg,
-  //'ella.png': ellaImg,
-  //'von.png': vonImg,
-  //'lanelle.png': lanelleImg,
-  //'vance.png': vanceImg
-};
-
-// Function to detect clicks on menu items
-function mouseClicked() {
-  if (mouseX < 50 && mouseY < 50) {
-    // Detect click within a region (adjust this according to your UI)
-    if (mouseX > 10 && mouseY > 10) {
-      currentObject = 'nathan.png'; // Change to the selected object
-    } else if (mouseX > 60 && mouseY > 10) {
-      currentObject = 'erica.png'; // Change to the selected object
-    }
-    // Add other conditions for the rest of the objects
-  }
-}
-    
 class ExplosionManager {
   constructor() {
     this.explosions = [];
@@ -235,6 +176,34 @@ class ExplosionParticle {
   isDead() {
     return this.lifespan < 0;
   }
+}
+
+function resetpumpkin() {
+
+  // Portal effect
+  let disappearPortal = new PortalEffect(pumpkin.position.x, pumpkin.position.y);
+  explosionManager.explosions.push(disappearPortal);
+
+  // Delete pumpkin
+  World.remove(engine.world, pumpkin);
+
+  // Create new pumpkin
+  pumpkin = Bodies.circle(150, height - 200, 20, {
+    isStatic: true
+  });
+  World.add(engine.world, pumpkin);
+
+  // Portal effect
+  let appearPortal = new PortalEffect(pumpkin.position.x, pumpkin.position.y);
+  explosionManager.explosions.push(appearPortal);
+
+  // Reset Decelerate
+  slingshot = new SlingShot(150, height - 200, pumpkin);
+
+  // Resetear states
+  pumpkinReleased = false;
+  pumpkinHasCollided = false;
+  pumpkinBeingDragged = false;
 }
 
 function mouseDragged() {
@@ -332,28 +301,15 @@ function mouseReleased() {
 function draw() {
   if (!gameStarted) {
     image(titleScreen, 0, 0, width, height);
+
   } else {
-    clear();
+    image(backgroundImage, 0, 0, width, height);
+
     Engine.update(engine);
+
     explosionManager.updateAndDisplay();
-      if (nathanImgLoaded && pumpkinImgLoaded) {
-        if (currentObject === 'nathan.png') {
-          image(nathanImg, 0, 0, 40, 40);
-        } else if (currentObject === 'erica.png') {
-          image(ericaImg, 0, 0, 40, 40);
-          } //else if (currentObject === 'ella.png') {
-          //image(ellaImg, 0, 0, 40, 40);
-          //} else if (currentObject === 'von.png') {
-          //image(vonImg, 0, 0, 40, 40);
-          //} else if (currentObject === 'lanelle.png') {
-          //image(lanelleImg, 0, 0, 40, 40);
-          //} else if (currentObject === 'vance.png') {
-          //image(vanceImg, 0, 0, 40, 40);
-        
-          // Handle other selected objects similarly
-        //}
-    }
-    // Check if the pumpkin has stopped after being launched
+
+    // Check if the bird has stopped after being launched
     if (pumpkinReleased && Math.abs(pumpkin.velocity.x) < 0.01 && Math.abs(pumpkin.velocity.y) < 0.01) {
       resetpumpkin();
     }
@@ -361,7 +317,7 @@ function draw() {
     // Set the blending mode to ADD for a mix effect
     blendMode(ADD);
 
-    // Beautiful torches with particle effects :)
+    // Beautiful torces with particle effects :)
     torch1.display(); 
     torch2.display();
 
@@ -379,7 +335,7 @@ function draw() {
         angle = atan2(velocity.y, velocity.x);
       }
     } else {
-      angle = pumpkin.angle;
+      angle = pumpkin.angle; // Use pumpkin.angle after collision
     }
 
     push();
@@ -392,21 +348,8 @@ function draw() {
     for (let box of boxes) {
       box.display();
     }
-
-    // Display the selection menu (adjust positions accordingly)
-    fill(255);
-    rect(10, 10, 40, 40);
-    image(nathanImg, 15, 15, 30, 30);
-    rect(60, 10, 40, 40);
-    image(ericaImg, 65, 15, 30, 30);
-    // Add other objects to the menu
-
-    // Detect clicks on menu items
-      // Modify the condition to change the displayed image based on the selected object
-
   }
 }
-
 
 class GameObject {
   constructor(x, y, w, h, img, scale, isMonster = false, isCircular = false) {
@@ -506,90 +449,62 @@ class Particle {
   }
 }
 
-
-   class PortalEffect {
-      constructor(x, y) {
-        this.pos = createVector(x, y);
-        this.particles = [];
-        for (let i = 0; i < 50; i++) {
-          this.particles.push(new PortalParticle(this.pos.x, this.pos.y, i));
-        }
-      }
-
-      update() {
-        for (let particle of this.particles) {
-          particle.update();
-        }
-      }
-
-      display() {
-        for (let particle of this.particles) {
-          particle.display();
-        }
-      }
-
-      isDead() {
-        return this.particles.every(particle => particle.isDead());
-      }
+class PortalEffect {
+  constructor(x, y) {
+    this.pos = createVector(x, y);
+    this.particles = [];
+    for (let i = 0; i < 50; i++) {
+      this.particles.push(new PortalParticle(this.pos.x, this.pos.y, i));
     }
+  }
 
-    class PortalParticle {
-      constructor(x, y, index) {
-        this.pos = createVector(x, y);
-        this.angle = TWO_PI / 50 * index; // Distribute particles in a circle
-        this.radius = random(2, 4); // Random spiral radius
-        this.speed = random(0.1, 0.2); // Random speed
-        this.lifespan = 255;
-        this.size = random(3, 6);
-      }
-
-      update() {
-        this.angle += this.speed;
-        this.pos.x = this.pos.x + cos(this.angle) * this.radius;
-        this.pos.y = this.pos.y + sin(this.angle) * this.radius;
-        this.lifespan -= 5;
-      }
-
-      display() {
-        noStroke();
-        fill(random(50, 150), random(0, 100), random(150, 255), this.lifespan); // Cool mystic colors!
-        ellipse(this.pos.x, this.pos.y, this.size);
-      }
-
-      isDead() {
-        return this.lifespan < 0;
-      }
+  update() {
+    for (let particle of this.particles) {
+      particle.update();
     }
+  }
 
-    function resetpumpkin() {
-        // Portal effect
-  let disappearPortal = new PortalEffect(pumpkin.position.x, pumpkin.position.y);
-  explosionManager.explosions.push(disappearPortal);
-
-  // Delete pumpkin
-  World.remove(engine.world, pumpkin);
-
-  // Create new pumpkin
-  pumpkin = Bodies.circle(150, height - 200, 20, {
-    isStatic: true
-  });
-  World.add(engine.world, pumpkin);
-
-  // Portal effect
-  let appearPortal = new PortalEffect(pumpkin.position.x, pumpkin.position.y);
-  explosionManager.explosions.push(appearPortal);
-
-  // Reset Decelerate
-  slingshot = new SlingShot(150, height - 200, pumpkin);
-
-  // Resetear states
-  pumpkinReleased = false;
-  pumpkinHasCollided = false;
-  pumpkinBeingDragged = false;
+  display() {
+    for (let particle of this.particles) {
+      particle.display();
     }
+  }
 
-    function collision(event) {
-       let pairs = event.pairs;
+  isDead() {
+    return this.particles.every(particle => particle.isDead());
+  }
+}
+
+class PortalParticle {
+  constructor(x, y, index) {
+    this.pos = createVector(x, y);
+    this.angle = TWO_PI / 50 * index; // Distribute particles in a circle
+    this.radius = random(2, 4); // Random spiral radius
+    this.speed = random(0.1, 0.2); // Random speed
+    this.lifespan = 255;
+    this.size = random(3, 6);
+  }
+
+  update() {
+    this.angle += this.speed;
+    this.pos.x = this.pos.x + cos(this.angle) * this.radius;
+    this.pos.y = this.pos.y + sin(this.angle) * this.radius;
+    this.lifespan -= 5;
+  }
+
+  display() {
+    noStroke();
+    fill(random(50, 150), random(0, 100), random(150, 255), this.lifespan); // Cool mystic colors!
+    ellipse(this.pos.x, this.pos.y, this.size);
+  }
+
+  isDead() {
+    return this.lifespan < 0;
+  }
+}
+
+function collision(event) {
+  let pairs = event.pairs;
 
   for (let i = 0; i < pairs.length; i++) {
     let bodyA = pairs[i].bodyA;
@@ -623,10 +538,10 @@ class Particle {
       pumpkinHasCollided = true; // Change pumpkinHasCollided to true on collision
     }
   }
-    }
+}
 
-    function propagateImpact(body, impactMagnitude, impactThreshold, originalCollisionPosition, visitedBodies = new Set()) {
-       // If the body is static or has already been visited, do not propagate the impact
+function propagateImpact(body, impactMagnitude, impactThreshold, originalCollisionPosition, visitedBodies = new Set()) {
+  // If the body is static or has already been visited, do not propagate the impact
   if (body.isStatic || visitedBodies.has(body)) {
     return;
   }
@@ -655,10 +570,10 @@ class Particle {
     // Propagate the impact to the other body
     propagateImpact(otherBody, reducedImpactMagnitude, impactThreshold, originalCollisionPosition, visitedBodies);
   }
-    }
+}
 
-    function handleExplosion(monsterBody) {
-       explosionManager.createExplosion(monsterBody.position.x, monsterBody.position.y);
+function handleExplosion(monsterBody) {
+  explosionManager.createExplosion(monsterBody.position.x, monsterBody.position.y);
   // Find and remove the monster from the boxes array
   for (let j = 0; j < boxes.length; j++) {
     if (boxes[j].body === monsterBody) {
@@ -667,7 +582,22 @@ class Particle {
       break; // Exit the loop once the monster is found and removed
     }
   }
+}
+
+class SlingShot {
+  constructor(x, y, body) {
+    this.origin = createVector(x, y);
+    this.body = body;
+  }
+
+  display() {
+    if (!pumpkinReleased) {
+      stroke(255);
+      strokeWeight(4);
+      line(this.origin.x, this.origin.y, pumpkin.position.x, pumpkin.position.y);
     }
+  }
+}
 
 
     // It should be placed between <script> tags within the body or head section
