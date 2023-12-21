@@ -11,6 +11,7 @@
 
     let pumpkinImg;
     let nathanImgLoaded = false;
+    let pumpkinImgLoaded = false;
     
     // Paste your p5.js code here
     let Engine = Matter.Engine,
@@ -39,15 +40,19 @@ function preload() {
   imgBone1 = loadImage('bone1.png');
   imgPlank1 = loadImage('plank1.png');
   monsterImg = loadImage('monster.png');
-  nathanImg = loadImage('nathan.png', () => {
-    console.log('Image loaded: nathanImg');
-    nathanImgLoaded = true;
-  });
   ericaImg = loadImage('erica.png');
+  nathanImg = loadImage('nathan.png', () => {
+        console.log('Image loaded: nathanImg');
+        nathanImgLoaded = true;
+      });
+
   pumpkinImg = loadImage('angry2.png', () => {
         console.log('Image loaded: pumpkinImg');
-})
+        pumpkinImgLoaded = true; // Set pumpkinImgLoaded to true when pumpkinImg is loaded
+      });
+
 }
+
 
 class SlingShot {
   constructor(x, y, body) {
@@ -381,16 +386,23 @@ function draw() {
     // Add other objects to the menu
 
     // Detect clicks on menu items
-    if (nathanImgLoaded && pumpkinImgLoaded){
-    if (mouseIsPressed) {
-      if (mouseX < 50 && mouseY < 50) {
-        if (mouseX > 10 && mouseY > 10) {
-          pumpkinImg = nathanImg; // Change to the selected object
-        } else if (mouseX > 60 && mouseY > 10) {
-          pumpkinImg = ericaImg; // Change to the selected object
-        }
-        // Add other conditions for the rest of the objects
-      }}
+      // Modify the condition to change the displayed image based on the selected object
+      if (nathanImgLoaded && pumpkinImgLoaded) {
+        if (currentObject === 'nathan.png') {
+          image(nathanImg, 0, 0, 40, 40);
+        } else if (currentObject === 'erica.png') {
+          image(ericaImg, 0, 0, 40, 40);
+          } //else if (currentObject === 'ella.png') {
+          //image(ellaImg, 0, 0, 40, 40);
+          //} else if (currentObject === 'von.png') {
+          //image(vonImg, 0, 0, 40, 40);
+          //} else if (currentObject === 'lanelle.png') {
+          //image(lanelleImg, 0, 0, 40, 40);
+          //} else if (currentObject === 'vance.png') {
+          //image(vanceImg, 0, 0, 40, 40);
+        
+          // Handle other selected objects similarly
+        //}
     }
   }
 }
