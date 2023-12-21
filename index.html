@@ -26,11 +26,25 @@ let pumpkinHasCollided = false;  // Flag to track if the pumpkin has collided wi
 let pumpkinBeingDragged = false;  // Flag to track if the pumpkin is being dragged
 let gameStarted = false;  // Flag to track if the game has started
 
+
+let objectIndex = 0;
+    let objectImages = [
+      'nathan.png',
+      'erica.png',
+      //'ella.png',
+      //'von.png',
+      //'lanelle.png',
+      //'vance.png'
+    ];
+
+let selectedObject = objectImages[objectIndex]; // Initial object
+    
 function preload() {
   titleScreen = loadImage('angry_pumpkins.jpg');
   backgroundImage = loadImage('background.png');
   imgSkull = loadImage('skull.png');
   pumpkinImg = loadImage('nathan.png');
+  ericaImg = loadImage('erica.png');
   imgBoxSkull = loadImage('box2.png');
   imgStone1 = loadImage('stone2.png');
   imgBone1 = loadImage('bone1.png');
@@ -38,6 +52,7 @@ function preload() {
   monsterImg = loadImage('monster.png');
 }
 
+    
 function setup() {
   let canvas = createCanvas(1500, 800);
 
@@ -274,7 +289,16 @@ function keyPressed() {
   if (key === ' ') {
     resetpumpkin();
   }
-
+  
+// Change the selected object based on key presses
+      if (keyCode === RIGHT_ARROW) {
+        objectIndex = (objectIndex + 1) % objectImages.length;
+      } else if (keyCode === LEFT_ARROW) {
+        objectIndex = (objectIndex - 1 + objectImages.length) % objectImages.length;
+      }
+      
+      selectedObject = objectImages[objectIndex];
+  
   // Clean all objects
   if (key === 'Enter') {
     for (let i = 0; i < boxes.length; i++) {
@@ -326,6 +350,8 @@ function draw() {
 
     slingshot.display();
 
+    pumpkinImg = loadImage(selectedObject);
+    
     let angle;
     if (!pumpkinHasCollided) {
       if (!pumpkinReleased) {
