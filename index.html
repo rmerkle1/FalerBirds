@@ -30,7 +30,7 @@ function preload() {
   titleScreen = loadImage('angry_pumpkins.jpg');
   backgroundImage = loadImage('background.png');
   imgSkull = loadImage('skull.png');
-  pumpkinImg = loadImage('nathan.png');
+  pumpkinImg = loadImage('erica.png');
   imgBoxSkull = loadImage('box2.png');
   imgStone1 = loadImage('stone2.png');
   imgBone1 = loadImage('bone1.png');
@@ -50,8 +50,7 @@ function setup() {
   World.add(engine.world, ground);
 
   pumpkin = Bodies.circle(150, height - 200, 20, {
-    isStatic: true,
-    density: 0.01
+    isStatic: true
   });
   World.add(engine.world, pumpkin);
 
