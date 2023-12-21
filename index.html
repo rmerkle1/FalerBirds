@@ -26,7 +26,9 @@ let pumpkinHasCollided = false;  // Flag to track if the pumpkin has collided wi
 let pumpkinBeingDragged = false;  // Flag to track if the pumpkin is being dragged
 let gameStarted = false;  // Flag to track if the game has started
 
-let isAlternate = false; // Boolean to track the current image
+let pumpkinImages = []; // Array to store different pumpkin images
+let currentPumpkinImage = 0; // Index to keep track of the current image
+    
 let resetCount = 0; // Variable to track the count
     
 
@@ -34,13 +36,17 @@ function preload() {
   titleScreen = loadImage('angry_pumpkins.jpg');
   backgroundImage = loadImage('background.png');
   imgSkull = loadImage('skull.png');
-  pumpkinImg = loadImage('nathan.png');
-  ericaImg = loadImage('erica.png');
+  //pumpkinImg = loadImage('nathan.png');
+  //ericaImg = loadImage('erica.png'); 
   imgBoxSkull = loadImage('box2.png');
   imgStone1 = loadImage('stone2.png');
   imgBone1 = loadImage('bone1.png');
   imgPlank1 = loadImage('plank1.png');
   monsterImg = loadImage('monster.png');
+
+  pumpkinImages.push(loadImage('nathan.png'));
+  pumpkinImages.push(loadImage('erica.png'));
+  pumpkinImg = pumpkinImages[currentPumpkinImage];
 }
 
 function setup() {
@@ -190,16 +196,12 @@ function resetpumpkin() {
   // Portal effect
   let disappearPortal = new PortalEffect(pumpkin.position.x, pumpkin.position.y);
   explosionManager.explosions.push(disappearPortal);
-
-  // Alternate between images
-  isAlternate = !isAlternate;
   
-  // Load images based on the boolean state
-  if (isAlternate) {
-    pumpkinImg = loadImage('erica.png');
-  } else {
-    pumpkinImg = loadImage('nathan.png');
-  }
+  // Alternate between pumpkin images
+  currentPumpkinImage = (currentPumpkinImage + 1) % pumpkinImages.length;
+  pumpkinImg = pumpkinImages[currentPumpkinImage];
+
+  
   
   // Delete pumpkin
   World.remove(engine.world, pumpkin);
@@ -340,8 +342,8 @@ function draw() {
 
     // Display the counter on the canvas
     fill(255);
-    textSize(24);
-    text(`Reset Count: ${resetCount}`, 20, 30);
+    textSize(36);
+    text(`Shot Count: ${resetCount}`, 20, 30);
 
     // Reset the blending mode to BLEND to draw the rest of the objects
     blendMode(BLEND);
