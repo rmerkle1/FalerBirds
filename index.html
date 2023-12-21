@@ -46,9 +46,9 @@ function preload() {
   pumpkinImages.push(loadImage('nathan.png'));
   pumpkinImages.push(loadImage('erica.png'));
   pumpkinImages.push(loadImage('ella.png'));
-  //pumpkinImages.push(loadImage('von.png'));
+  pumpkinImages.push(loadImage('von.png'));
   pumpkinImages.push(loadImage('lanelle.png'));
-  //pumpkinImages.push(loadImage('vance.png'));
+  pumpkinImages.push(loadImage('vance.png'));
   pumpkinImg = pumpkinImages[currentPumpkinImage];
 }
 
@@ -303,6 +303,7 @@ function keyPressed() {
       World.remove(engine.world, boxes[i].body);
     }
     boxes = [];
+    shotCounter = 0; // Reset the shot counter to 0
   }
 }
 
