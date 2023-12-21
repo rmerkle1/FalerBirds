@@ -26,37 +26,18 @@ let pumpkinHasCollided = false;  // Flag to track if the pumpkin has collided wi
 let pumpkinBeingDragged = false;  // Flag to track if the pumpkin is being dragged
 let gameStarted = false;  // Flag to track if the game has started
 
-
-let objectIndex = 1;
-    let objectImages = [
-      'nathan.png',
-      'erica.png',
-      //'ella.png',
-      //'von.png',
-      //'lanelle.png',
-      //'vance.png'
-    ];
-
-let pumpkinImg;
-
-let selectedObject = objectImages[objectIndex]; // Initial object
-    
 function preload() {
   titleScreen = loadImage('angry_pumpkins.jpg');
   backgroundImage = loadImage('background.png');
   imgSkull = loadImage('skull.png');
-  nathanImg = loadImage('nathan.png');
-  ericaImg = loadImage('erica.png');
+  pumpkinImg = loadImage('nathan.png');
   imgBoxSkull = loadImage('box2.png');
   imgStone1 = loadImage('stone2.png');
   imgBone1 = loadImage('bone1.png');
   imgPlank1 = loadImage('plank1.png');
   monsterImg = loadImage('monster.png');
-
-  pumpkinImg = loadImage(selectedObject);
 }
 
-    
 function setup() {
   let canvas = createCanvas(1500, 800);
 
@@ -70,7 +51,7 @@ function setup() {
 
   pumpkin = Bodies.circle(150, height - 200, 20, {
     isStatic: true,
-    density: 0.001
+    density: 0.01
   });
   World.add(engine.world, pumpkin);
 
@@ -289,20 +270,10 @@ function mousePressed() {
 }
 
 function keyPressed() {
-  // Reset pumpkin position
+  //reset pumpkin position
   if (key === ' ') {
     resetpumpkin();
   }
-
-  // Change the selected object based on key presses
-  if (keyCode === RIGHT_ARROW) {
-    objectIndex = (objectIndex + 1) % objectImages.length;
-  } else if (keyCode === LEFT_ARROW) {
-    objectIndex = (objectIndex - 1 + objectImages.length) % objectImages.length;
-  }
-
-  // Update the selected object image based on the new objectIndex
-  selectedObject = objectImages[objectIndex];
 
   // Clean all objects
   if (key === 'Enter') {
@@ -349,16 +320,12 @@ function draw() {
     // Beautiful torces with particle effects :)
     torch1.display(); 
     torch2.display();
-    
+
     // Reset the blending mode to BLEND to draw the rest of the objects
     blendMode(BLEND);
 
-    pumpkinImg = loadImage(objectImages[objectIndex]);
-    
     slingshot.display();
 
-    
-    
     let angle;
     if (!pumpkinHasCollided) {
       if (!pumpkinReleased) {
